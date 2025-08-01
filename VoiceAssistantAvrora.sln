@@ -11,13 +11,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.UI", "Client\UI\VoiceAssistant.Client.UI\VoiceAssistant.Client.UI.csproj", "{CDA752D6-6A4A-4514-9D27-113BE04D2257}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.Grpc", "Client\VoiceAssistant.Client.Grpc\VoiceAssistant.Client.Grpc.csproj", "{80D50177-A9C5-4159-9FAD-CBB9C53537C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.Grpc", "Client\Core\VoiceAssistant.Client.Grpc\VoiceAssistant.Client.Grpc.csproj", "{80D50177-A9C5-4159-9FAD-CBB9C53537C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client", "Client\VoiceAssistant.Client\VoiceAssistant.Client.csproj", "{C1544874-98D8-4790-8A35-93A47E901D47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client", "Client\Core\VoiceAssistant.Client\VoiceAssistant.Client.csproj", "{C1544874-98D8-4790-8A35-93A47E901D47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{F0FAD1BC-CAD0-4184-84D7-D1C1FE16F94C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.Abstractions", "..\Client\VoiceAssistant Avrora\VoiceAssistant.Client.Abstractions\VoiceAssistant.Client.Abstractions.csproj", "{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.Abstractions", "Client\Core\VoiceAssistant.Client.Abstractions\VoiceAssistant.Client.Abstractions.csproj", "{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}"
+EndProject
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{766257C8-A35B-41AC-A955-0FD99A05D463}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,8 +55,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{93169D3C-E178-4A10-B982-4E07A42782E4} = {4EE65C12-41EC-4CAB-8C63-62E6D1E57E20}
 		{CDA752D6-6A4A-4514-9D27-113BE04D2257} = {F0FAD1BC-CAD0-4184-84D7-D1C1FE16F94C}
-		{80D50177-A9C5-4159-9FAD-CBB9C53537C4} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
-		{C1544874-98D8-4790-8A35-93A47E901D47} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{80D50177-A9C5-4159-9FAD-CBB9C53537C4} = {766257C8-A35B-41AC-A955-0FD99A05D463}
+		{C1544874-98D8-4790-8A35-93A47E901D47} = {766257C8-A35B-41AC-A955-0FD99A05D463}
 		{F0FAD1BC-CAD0-4184-84D7-D1C1FE16F94C} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 	EndGlobalSection
