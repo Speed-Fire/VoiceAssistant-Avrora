@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VoiceAssistant.Client.Abstractions\VoiceAssistant.Client.Abstractions.csproj" />
+    <ProjectReference Include="..\VoiceAssistant.Client.Audio\VoiceAssistant.Client.Audio.csproj" />
     <ProjectReference Include="..\VoiceAssistant.Client.Grpc\VoiceAssistant.Client.Grpc.csproj" />
   </ItemGroup>
 

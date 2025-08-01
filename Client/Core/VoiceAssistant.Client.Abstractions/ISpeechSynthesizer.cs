@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace VoiceAssistant.Client.Abstractions
 {
-	public interface ISpeechSynthesizer
+	public interface ISpeechSynthesizer : IDisposable
 	{
-		Task SpeakAsync(string text);
+		Task SpeakAsync(string text, CancellationToken stoppingToken);
 	}
 }

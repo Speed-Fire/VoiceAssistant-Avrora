@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
+using VoiceAssistant.Client.Audio.Extensions;
 using VoiceAssistant.Client.Workers;
 
 namespace VoiceAssistant.Client
@@ -25,8 +26,12 @@ namespace VoiceAssistant.Client
 		{
 			var builder = Host.CreateApplicationBuilder();
 
-			builder.Services.AddHostedService<UICommandsWorker>();
-			builder.Services.AddHostedService<VoiceCommandsWorker>();
+			builder.Services
+				.AddHostedService<UICommandsWorker>()
+				.AddHostedService<VoiceCommandsWorker>();
+
+			builder.Services
+				.RegisterAudio();
 
 			return builder.Build();
 		}

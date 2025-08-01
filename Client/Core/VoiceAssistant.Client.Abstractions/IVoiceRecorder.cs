@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace VoiceAssistant.Client.Abstractions
 {
-	public interface IVoiceRecorder
+	public interface IVoiceRecorder : IDisposable
 	{
-		Task<byte[]> RecordAsync(CancellationToken stoppingToken);
+		Task<Stream> RecordAsync(CancellationToken stoppingToken);
 	}
 }

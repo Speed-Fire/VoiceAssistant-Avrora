@@ -8,6 +8,6 @@ namespace VoiceAssistant.Client.Abstractions
 {
 	public interface IServerCommunicator
 	{
-		Task<Stream> SendCommandAsync(byte[] audio, CancellationToken stoppingToken);
+		Task<Stream> SendCommandAsync(Stream audio, CancellationToken stoppingToken);
 	}
 }
