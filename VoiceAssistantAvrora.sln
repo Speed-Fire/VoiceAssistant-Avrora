@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client", "Cl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{F0FAD1BC-CAD0-4184-84D7-D1C1FE16F94C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Client.Abstractions", "..\Client\VoiceAssistant Avrora\VoiceAssistant.Client.Abstractions\VoiceAssistant.Client.Abstractions.csproj", "{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C1544874-98D8-4790-8A35-93A47E901D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1544874-98D8-4790-8A35-93A47E901D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1544874-98D8-4790-8A35-93A47E901D47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{80D50177-A9C5-4159-9FAD-CBB9C53537C4} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{C1544874-98D8-4790-8A35-93A47E901D47} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 		{F0FAD1BC-CAD0-4184-84D7-D1C1FE16F94C} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{52D3412D-81BE-42CC-BE7F-2F188BEC0CA8} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C32B1D8E-1EB3-49E4-83B3-84ADE22DE98D}
