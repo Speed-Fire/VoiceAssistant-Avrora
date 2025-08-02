@@ -16,4 +16,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VoiceAssistant.Client.Abstractions\VoiceAssistant.Client.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\CommandHandling.proto" GrpcServices="Client" />
+  </ItemGroup>
+
 </Project>

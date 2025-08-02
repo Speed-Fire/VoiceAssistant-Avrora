@@ -13,24 +13,24 @@ namespace VoiceAssistant.Client.Workers
 	{
 		private readonly IKeyPhraseListener _keyPhraseListener;
 		private readonly IVoiceRecorder _voiceRecorder;
-		private readonly IServerCommunicator _serverCommunicator;
+		private readonly ICommandHandler _commandHandler;
 		private readonly ISpeechSynthesizer _speechSynthesizer;
-		private readonly IVoiceCommandHandler _voiceCommandHandler;
+		private readonly Abstractions.ICommandExecutor _commandExecutor;
 		private readonly ILogger _logger;
 
 		public VoiceCommandsWorker(
 			IKeyPhraseListener keyPhraseListener,
 			IVoiceRecorder voiceRecorder,
-			IServerCommunicator serverCommunicator,
+			ICommandHandler serverCommunicator,
 			ISpeechSynthesizer speechSynthesizer,
-			IVoiceCommandHandler voiceCommandHandler,
+			Abstractions.ICommandExecutor voiceCommandHandler,
 			ILogger<VoiceCommandsWorker> logger)
 		{
 			_keyPhraseListener = keyPhraseListener;
 			_voiceRecorder = voiceRecorder;
-			_serverCommunicator = serverCommunicator;
+			_commandHandler = serverCommunicator;
 			_speechSynthesizer = speechSynthesizer;
-			_voiceCommandHandler = voiceCommandHandler;
+			_commandExecutor = voiceCommandHandler;
 			_logger = logger;
 		}
 
@@ -44,7 +44,7 @@ namespace VoiceAssistant.Client.Workers
 
 					stoppingToken.ThrowIfCancellationRequested();
 
-					await _speechSynthesizer.SpeakAsync("Слушаю вас");
+					await _speechSynthesizer.SpeakAsync("Слушаю вас", stoppingToken);
 
 					stoppingToken.ThrowIfCancellationRequested();
 
@@ -52,12 +52,12 @@ namespace VoiceAssistant.Client.Workers
 
 					stoppingToken.ThrowIfCancellationRequested();
 
-					using var answer = 
-						await _serverCommunicator.SendCommandAsync(audio, stoppingToken);
+					await foreach(var command in _commandHandler.HandleAsync(audio, stoppingToken))
+					{
+						stoppingToken.ThrowIfCancellationRequested();
 
-					stoppingToken.ThrowIfCancellationRequested();
-
-					await _voiceCommandHandler.HandleAsync(answer);
+						await _commandExecutor.ExecuteAsync(command);
+					}
 
 					stoppingToken.ThrowIfCancellationRequested();
 				}
