@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace VoiceAssistant.Client.Abstractions
 {
-	public interface IServerCommunicator
+	public interface ICommandHandler
 	{
-		Task<Stream> SendCommandAsync(Stream audio, CancellationToken stoppingToken);
+		IAsyncEnumerable<string> HandleAsync(Stream audio, CancellationToken stoppingToken);
 	}
 }
