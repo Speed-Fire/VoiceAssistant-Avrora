@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace VoiceAssistant.Client.Abstractions
 {
-	public interface IVoiceCommandHandler
+	public interface ICommandExecutor
 	{
-		Task HandleAsync(Stream command);
+		Task ExecuteAsync(string command);
 	}
 }
