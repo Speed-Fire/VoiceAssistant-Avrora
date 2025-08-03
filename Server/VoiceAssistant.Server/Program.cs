@@ -1,3 +1,4 @@
+using Renci.SshNet;
 using StackExchange.Redis;
 using VoiceAssistant.Server.Services;
 
@@ -16,13 +17,21 @@ namespace VoiceAssistant.Server
 
             builder.Services
                 .AddSingleton<ConnectionMultiplexer>(provider =>
-            {
-                var config = provider.GetRequiredService<IConfiguration>();
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
                     var redis_address = config["Redis:Address"];
 
-                return ConnectionMultiplexer.Connect(redis_address!);
+                    return ConnectionMultiplexer.Connect(redis_address!);
                 })
-            });
+                .AddKeyedTransient<SftpClient>("AudioFTP", (provider, key) =>
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
+                    var address = config["Sftp:Address"];
+                    var username = config["Sftp:Audio:Username"];
+                    var password = config["Sftp:Audio:Password"];
+
+                    return new SftpClient(address!, username!, password!);
+                });
 
             var app = builder.Build();
 
