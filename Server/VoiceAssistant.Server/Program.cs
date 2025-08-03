@@ -14,12 +14,14 @@ namespace VoiceAssistant.Server
             // Add services to the container.
             builder.Services.AddGrpc();
 
-            builder.Services.AddSingleton<ConnectionMultiplexer>(provider =>
+            builder.Services
+                .AddSingleton<ConnectionMultiplexer>(provider =>
             {
                 var config = provider.GetRequiredService<IConfiguration>();
-                var redis_address = config["Redis_address"];
+                    var redis_address = config["Redis:Address"];
 
                 return ConnectionMultiplexer.Connect(redis_address!);
+                })
             });
 
             var app = builder.Build();
