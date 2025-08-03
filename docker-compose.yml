@@ -1,0 +1,26 @@
+services:
+    voiceassistant.server:
+        image: ${DOCKER_REGISTRY-}voiceassistantserver
+        depends_on:
+            sftp:
+                condition: service_started
+            redis:
+                condition: service_started
+        build:
+            context: .
+            dockerfile: Server/VoiceAssistant.Server/Dockerfile
+
+    sftp:
+        image: atmoz/sftp
+        container_name: sftp-server
+        restart: always
+        ports:
+            - "2222:22"
+        volumes:
+            - ./users/AudioUser:/home/AudioUser/upload
+        command: >
+            AudioUser:12345:::upload
+
+    redis:
+        image: "redis:8"
+
