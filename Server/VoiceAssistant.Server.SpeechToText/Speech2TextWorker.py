@@ -1,3 +1,4 @@
+import redis.exceptions
 import whisper
 import redis
 import json
@@ -15,13 +16,13 @@ def redis_db():
         password = Config.redis_password,
         decode_responses = True
     )
-    
+
     db.ping()
     
     return db
 
-def get_recognition_queue(db: redis.Redis): 
-    task_queue = reliable_queue.ReliableQueue(db, 
+def get_recognition_queue(): 
+    task_queue = reliable_queue.ReliableQueue(
         Config.redis_recognition_queue_name,
         Config.redis_temp_recognition_queue_name,
         Config.redis_timestamps_recognition_queue_name
@@ -29,8 +30,8 @@ def get_recognition_queue(db: redis.Redis):
 
     return task_queue
 
-def get_command_handling_queue(db: redis.Redis): 
-    task_queue = reliable_queue.ReliableQueue(db, 
+def get_command_handling_queue(): 
+    task_queue = reliable_queue.ReliableQueue( 
         Config.redis_command_handling_queue_name,
         Config.redis_temp_command_handling_queue_name,
         Config.redis_timestamps_command_handling_queue_name
@@ -68,13 +69,13 @@ def create_command_handling_task(task_id, user, recognized_text):
 
 def main():
     db = redis_db()
-    recog_queue = get_recognition_queue(db)
-    handling_queue = get_command_handling_queue(db)
+    recog_queue = get_recognition_queue()
+    handling_queue = get_command_handling_queue()
     
     ai_model = whisper.load_model(name = "small")
 
     while True:
-        recog_task = recog_queue.dequeue()
+        recog_task = recog_queue.dequeue(db)
         task_id, user, audio_url = parse_recognition_task(recog_task)
 
         ssh_client, sftp = open_sftp()
@@ -84,12 +85,18 @@ def main():
             tmp.flush()
 
             recognized_text = ai_model.transcribe(tmp.name)
-
             command_task = create_command_handling_task(task_id, user, recognized_text)
-            handling_queue.enqueue(command_task)
 
-            recog_queue.mark_completed(recog_task)
-            sftp.remove(audio_url)       
+            transaction = db.pipeline()
+
+            handling_queue.enqueue(transaction, command_task)
+            recog_queue.mark_completed(transaction, recog_task)
+
+            try:
+                transaction.execute()
+                sftp.remove(audio_url)
+            except redis.exceptions.RedisError as e:
+                pass
 
         sftp.close()
         ssh_client.close()
