@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>bdaa7d23-bee9-46d0-b33d-e3289e6d72a9</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>VoiceAssistant.Server.SpeechToText.py</StartupFile>
+    <StartupFile>Speech2TextWorker.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>VoiceAssistant.Server.SpeechToText</Name>
     <RootNamespace>VoiceAssistant.Server.SpeechToText</RootNamespace>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="VoiceAssistant.Server.SpeechToText.py" />
+    <Compile Include="Config.py" />
+    <Compile Include="reliable_queue.py" />
+    <Compile Include="Speech2TextWorker.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />

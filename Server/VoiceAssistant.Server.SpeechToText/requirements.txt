@@ -1,3 +1,4 @@
 redis
 torch --index-url https://download.pytorch.org/whl/cu118
 git+https://github.com/openai/whisper.git
+paramiko
