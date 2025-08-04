@@ -4,6 +4,7 @@ using Renci.SshNet;
 using StackExchange.Redis;
 using System.Text.Json.Nodes;
 using VoiceAssistant.Server;
+using VoiceAssistant.Server.Options;
 
 namespace VoiceAssistant.Server.Services
 {
@@ -11,16 +12,16 @@ namespace VoiceAssistant.Server.Services
 	{
 		private readonly ConnectionMultiplexer _redis;
 		private readonly SftpClient _audioFTP;
-		private readonly string _recognitionQueueName;
+		private readonly RecognitionQueueOptions _recognitionQueue;
 
 		public CommandHandlingService(
 			ConnectionMultiplexer redis,
 			[FromKeyedServices("AudioFTP")] SftpClient audioFTP,
-			IConfiguration config)
+			RecognitionQueueOptions recognitionQueue)
 		{
 			_redis = redis;
 			_audioFTP = audioFTP;
-			_recognitionQueueName = config["REDIS_QUEUES_RECOGNITION_PENDING"]!;
+			_recognitionQueue = recognitionQueue;
 		}
 
 		public override async Task Handle(
@@ -59,12 +60,12 @@ namespace VoiceAssistant.Server.Services
 			var json = string.Format("{{\"Id\":\"{0}\":\"{1}\"}}", taskId, audio_url);
 
 			var db = _redis.GetDatabase();
-			await db.ListLeftPushAsync(_recognitionQueueName, json);
+			await db.ListLeftPushAsync(_recognitionQueue.PendingQueue, json);
 		}
 
 		private async Task<string> GetRecognitionResult(string taskId)
 		{
-			var resultKey = $"{_recognitionQueueName}:{taskId}";
+			var resultKey = $"{_recognitionQueue.PendingQueue}:{taskId}";
 			var db = _redis.GetDatabase();
 
 			for(int i = 0; i < 10; i++)

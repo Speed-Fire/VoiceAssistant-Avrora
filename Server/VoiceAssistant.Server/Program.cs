@@ -1,5 +1,6 @@
 using Renci.SshNet;
 using StackExchange.Redis;
+using VoiceAssistant.Server.Options;
 using VoiceAssistant.Server.Services;
 
 namespace VoiceAssistant.Server
@@ -10,10 +11,12 @@ namespace VoiceAssistant.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            
-
             // Add services to the container.
             builder.Services.AddGrpc();
+
+            builder.Services
+                .Configure<RecognitionQueueOptions>(builder.Configuration)
+                .Configure<CommandHandlingQueueOptions>(builder.Configuration);
 
             builder.Services
                 .AddSingleton<ConnectionMultiplexer>(provider =>
