@@ -19,18 +19,28 @@ namespace VoiceAssistant.Server
                 .AddSingleton<ConnectionMultiplexer>(provider =>
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
-                    var redis_address = config["Redis:Address"];
 
-                    return ConnectionMultiplexer.Connect(redis_address!);
+                    var redis_config = new ConfigurationOptions()
+                    {
+                        EndPoints = {
+                            { config["REDIS_HOST"]!, int.Parse(config["REDIS_PORT"]!) }
+                        },
+                        Password = config["REDIS_PASSWORD"]!,
+                        KeepAlive = 100,
+                        ConnectTimeout = 10000
+                    };
+
+                    return ConnectionMultiplexer.Connect(redis_config);
                 })
                 .AddKeyedTransient<SftpClient>("AudioFTP", (provider, key) =>
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
-                    var address = config["Sftp:Address"];
-                    var username = config["Sftp:Audio:Username"];
-                    var password = config["Sftp:Audio:Password"];
+                    var host = config["SFTP_HOST"];
+                    var port = int.Parse(config["SFTP_PORT"]!);
+                    var username = config["SFTP_USERS_AUDIO_NAME"];
+                    var password = config["SFTP_USERS_AUDIO_PASSWORD"];
 
-                    return new SftpClient(address!, username!, password!);
+                    return new SftpClient(host!, port, username!, password!);
                 });
 
             var app = builder.Build();

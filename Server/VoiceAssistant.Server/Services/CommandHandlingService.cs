@@ -20,7 +20,7 @@ namespace VoiceAssistant.Server.Services
 		{
 			_redis = redis;
 			_audioFTP = audioFTP;
-			_recognitionQueueName = config["Redis:Queues:Recognition"]!;
+			_recognitionQueueName = config["REDIS_QUEUES_RECOGNITION_PENDING"]!;
 		}
 
 		public override async Task Handle(
