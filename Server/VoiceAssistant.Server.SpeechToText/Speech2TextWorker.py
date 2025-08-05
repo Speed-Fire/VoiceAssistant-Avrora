@@ -25,7 +25,7 @@ def get_recognition_queue():
     task_queue = reliable_queue.ReliableQueue(
         Config.redis_recognition_queue_name,
         Config.redis_temp_recognition_queue_name,
-        Config.redis_timestamps_recognition_queue_name
+        Config.redis_timestamps_recognition_hash_name
     )
 
     return task_queue
@@ -34,7 +34,7 @@ def get_command_handling_queue():
     task_queue = reliable_queue.ReliableQueue( 
         Config.redis_command_handling_queue_name,
         Config.redis_temp_command_handling_queue_name,
-        Config.redis_timestamps_command_handling_queue_name
+        Config.redis_timestamps_command_handling_hash_name
     )
 
     return task_queue
