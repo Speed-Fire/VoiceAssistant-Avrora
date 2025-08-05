@@ -11,6 +11,6 @@ namespace VoiceAssistant.Server.Options
 		public string ProcessingQueue { get; set; } = string.Empty;
 
 		[ConfigurationKeyName("REDIS_QUEUES_RECOGNITION_TIMESTAMPS")]
-		public string TimestampsQueue { get; set; } = string.Empty;
+		public string TimestampsHash { get; set; } = string.Empty;
 	}
 }

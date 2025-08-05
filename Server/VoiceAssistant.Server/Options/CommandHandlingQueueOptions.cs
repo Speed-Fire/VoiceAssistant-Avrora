@@ -9,6 +9,6 @@
 		public string ProcessingQueue { get; set; } = string.Empty;
 
 		[ConfigurationKeyName("REDIS_QUEUES_COMMAND_HANDLING_TIMESTAMPS")]
-		public string TimestampsQueue { get; set; } = string.Empty;
+		public string TimestampsHash { get; set; } = string.Empty;
 	}
 }
