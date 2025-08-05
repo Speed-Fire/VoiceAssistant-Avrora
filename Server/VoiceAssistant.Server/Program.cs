@@ -2,6 +2,7 @@ using Renci.SshNet;
 using StackExchange.Redis;
 using VoiceAssistant.Server.Options;
 using VoiceAssistant.Server.Services;
+using VoiceAssistant.Server.Workers;
 
 namespace VoiceAssistant.Server
 {
@@ -17,6 +18,10 @@ namespace VoiceAssistant.Server
             builder.Services
                 .Configure<RecognitionQueueOptions>(builder.Configuration)
                 .Configure<CommandHandlingQueueOptions>(builder.Configuration);
+
+            builder.Services
+                .AddHostedService<RecognitionQueueWorker>()
+                .AddHostedService<CommandHandlingQueueWorker>();
 
             builder.Services
                 .AddSingleton<ConnectionMultiplexer>(provider =>
