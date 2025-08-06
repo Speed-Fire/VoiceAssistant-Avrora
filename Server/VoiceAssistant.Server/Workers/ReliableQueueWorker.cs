@@ -1,17 +1,21 @@
 ﻿
 using StackExchange.Redis;
+using System.Reflection;
+using VoiceAssistant.Server.Extensions;
 
 namespace VoiceAssistant.Server.Workers
 {
 	public class ReliableQueueWorker : BackgroundService
 	{
 		private readonly ConnectionMultiplexer _redis;
-
+			
 		private readonly int _tempEntryLifetime;
 
 		private readonly string _pendingQueue;
 		private readonly string _prosessingQueue;
 		private readonly string _timestampsSet;
+
+		private LoadedLuaScript? _moveBackToPendingScript;
 
 		public ReliableQueueWorker(
 			ConnectionMultiplexer redis,
@@ -25,6 +29,32 @@ namespace VoiceAssistant.Server.Workers
 			_pendingQueue = pendingQueue;
 			_prosessingQueue = prosessinggQueue;
 			_timestampsSet = timestampsSet;
+		}
+
+		public override async Task StartAsync(CancellationToken cancellationToken)
+		{
+			using (var luaScript = Assembly.GetEntryAssembly()!
+			.GetManifestResourceStream("VoiceAssistant.Server.Lua.ReliableQueue.MoveBackToPending.lua")){
+				var script = string.Empty;
+				
+				using(var reader = new StreamReader(luaScript!))
+				{
+					script = await reader.ReadToEndAsync(cancellationToken);
+				}
+
+				if (cancellationToken.IsCancellationRequested)
+					return;
+
+				var db = _redis.GetDatabase();
+				var server = _redis.GetMasterServer();
+
+				if (server is null)
+					throw new InvalidOperationException("Master server not found.");
+
+				var loadedScript = await LuaScript.Prepare(script).LoadAsync(server);
+				
+				_moveBackToPendingScript = loadedScript;
+			}
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -46,14 +76,16 @@ namespace VoiceAssistant.Server.Workers
 					if (now - timestamp <= _tempEntryLifetime)
 						continue;
 
-					var trans = db.CreateTransaction();
-					trans.AddCondition(Condition.HashExists(_timestampsSet, item));
+					if (_moveBackToPendingScript is null)
+						throw new InvalidOperationException("Moving script is not loaded.");
 
-					_ = trans.ListRemoveAsync(_prosessingQueue, item);
-					_ = trans.ListLeftPushAsync(_pendingQueue, item);
-					_ = trans.HashDeleteAsync(_timestampsSet, item);
-
-					await trans.ExecuteAsync(CommandFlags.FireAndForget);
+					await db.ScriptEvaluateAsync(_moveBackToPendingScript, new
+					{
+						pendingQueue = (RedisKey)_pendingQueue,
+						processingQueue = (RedisKey)_prosessingQueue,
+						timestampsHash = (RedisKey)_timestampsSet,
+						task_id = item
+					});
 				}
 
 				await Task.Delay(1000, stoppingToken);

@@ -11,7 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Lua\ReliableQueue\MoveBackToPending.lua" />
     <None Remove="Protos\CommandHandling.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Lua\ReliableQueue\MoveBackToPending.lua" />
   </ItemGroup>
 
   <ItemGroup>
