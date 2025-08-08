@@ -8,6 +8,7 @@ import tempfile
 import Config
 
 import reliable_queue
+import backoff
 
 def redis_db():
     db = redis.Redis(
@@ -68,6 +69,7 @@ def create_command_handling_task(task_id, user, recognized_text):
     return json.dumps(data)
 
 def main():
+    backof = backoff.Backoff()
     db = redis_db()
     recog_queue = get_recognition_queue(db)
     handling_queue = get_command_handling_queue(db)
@@ -76,6 +78,11 @@ def main():
 
     while True:
         recog_task = recog_queue.dequeue()
+        if recog_task is None:
+            backof.wait()
+            continue
+
+        backof.reset()
         task_id, user, audio_url = parse_recognition_task(recog_task)
 
         ssh_client, sftp = open_sftp()
