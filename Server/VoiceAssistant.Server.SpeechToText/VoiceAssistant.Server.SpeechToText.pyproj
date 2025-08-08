@@ -23,12 +23,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Config.py" />
+    <Compile Include="luaScript.py" />
     <Compile Include="reliable_queue.py" />
     <Compile Include="Speech2TextWorker.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dockerfile" />
+    <Content Include="Lua\ReliableQueue\Dequeue.lua" />
+    <Content Include="Lua\ReliableQueue\MarkAsCompleted.lua" />
     <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lua\" />
+    <Folder Include="Lua\ReliableQueue\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

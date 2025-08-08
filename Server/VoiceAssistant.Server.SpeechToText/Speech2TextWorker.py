@@ -21,8 +21,8 @@ def redis_db():
     
     return db
 
-def get_recognition_queue(): 
-    task_queue = reliable_queue.ReliableQueue(
+def get_recognition_queue(db: redis.Redis): 
+    task_queue = reliable_queue.ReliableQueue(db,
         Config.redis_recognition_queue_name,
         Config.redis_temp_recognition_queue_name,
         Config.redis_timestamps_recognition_hash_name
@@ -30,8 +30,8 @@ def get_recognition_queue():
 
     return task_queue
 
-def get_command_handling_queue(): 
-    task_queue = reliable_queue.ReliableQueue( 
+def get_command_handling_queue(db: redis.Redis): 
+    task_queue = reliable_queue.ReliableQueue(db,
         Config.redis_command_handling_queue_name,
         Config.redis_temp_command_handling_queue_name,
         Config.redis_timestamps_command_handling_hash_name
@@ -69,13 +69,13 @@ def create_command_handling_task(task_id, user, recognized_text):
 
 def main():
     db = redis_db()
-    recog_queue = get_recognition_queue()
-    handling_queue = get_command_handling_queue()
+    recog_queue = get_recognition_queue(db)
+    handling_queue = get_command_handling_queue(db)
     
     ai_model = whisper.load_model(name = "small")
 
     while True:
-        recog_task = recog_queue.dequeue(db)
+        recog_task = recog_queue.dequeue()
         task_id, user, audio_url = parse_recognition_task(recog_task)
 
         ssh_client, sftp = open_sftp()
@@ -87,16 +87,13 @@ def main():
             recognized_text = ai_model.transcribe(tmp.name)
             command_task = create_command_handling_task(task_id, user, recognized_text)
 
-            transaction = db.pipeline()
-
-            handling_queue.enqueue(transaction, command_task)
-            recog_queue.mark_completed(transaction, recog_task)
-
             try:
-                transaction.execute()
-                sftp.remove(audio_url)
+                handling_queue.enqueue(command_task)
+                recog_queue.mark_completed(recog_task)
             except redis.exceptions.RedisError as e:
                 pass
+
+            sftp.remove(audio_url)
 
         sftp.close()
         ssh_client.close()
