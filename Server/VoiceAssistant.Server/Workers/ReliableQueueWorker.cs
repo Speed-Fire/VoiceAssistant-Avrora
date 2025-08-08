@@ -62,30 +62,19 @@ namespace VoiceAssistant.Server.Workers
 			while(!stoppingToken.IsCancellationRequested)
 			{
 				var db = _redis.GetDatabase();
+				
+				var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - _tempEntryLifetime;
 
-				var list = await db.ListRangeAsync(_prosessingQueue);
-				var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+				var entriesToRem = await db.SortedSetRangeByScoreAsync(_timestampsSet, stop: time);
 
-				foreach (var item in list)
+				if(entriesToRem is not null && entriesToRem.Length > 0)
 				{
-					var time = await db.HashGetAsync(_timestampsSet, item);
-					if (!time.HasValue)
-						continue;
-
-					var timestamp = long.Parse(time!);
-					if (now - timestamp <= _tempEntryLifetime)
-						continue;
-
 					if (_moveBackToPendingScript is null)
 						throw new InvalidOperationException("Moving script is not loaded.");
 
-					await db.ScriptEvaluateAsync(_moveBackToPendingScript, new
-					{
-						pendingQueue = (RedisKey)_pendingQueue,
-						processingQueue = (RedisKey)_prosessingQueue,
-						timestampsHash = (RedisKey)_timestampsSet,
-						task_id = item
-					});
+					await db.ScriptEvaluateAsync(_moveBackToPendingScript.ExecutableScript,
+						[_pendingQueue, _prosessingQueue, _timestampsSet],
+						entriesToRem);
 				}
 
 				await Task.Delay(1000, stoppingToken);

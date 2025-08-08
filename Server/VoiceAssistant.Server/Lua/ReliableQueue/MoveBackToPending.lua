@@ -2,12 +2,12 @@
 -- KEYS[2] - processing queue
 -- KEYS[3] - timestamps hash
 --
--- ARGV[1] - task id
+-- ARGV[] - task ids
 
-if redis.call('HEXISTS', @timestampsHash, @task_id) == 1 then
-	redis.call('LREM', @processingQueue, @task_id)
-	redis.call('HDEL', @timestampsHash, @task_id)
-	redis.call('LPUSH', @pendingQueue, @task_id)
-	return 1
+for item in ARGV do
+	if redis.call('ZSCORE', KEYS[3], item) ~= nil then
+		redis.call('LREM', KEYS[2], item)
+		redis.call('ZREM', KEYS[3], item)
+		redis.call('LPUSH', KEYS[1], item)
+	end
 end
-return 0
