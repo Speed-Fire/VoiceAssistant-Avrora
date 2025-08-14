@@ -1,6 +1,6 @@
 ﻿-- KEYS[1] - pending queue
 -- KEYS[2] - processing queue
--- KEYS[3] - timestamps hash
+-- KEYS[3] - timestamps set
 --
 -- ARGV[] - task ids
 

@@ -14,7 +14,7 @@ namespace VoiceAssistant.Server.Workers
 				  config,
 				  options.PendingQueue,
 				  options.ProcessingQueue,
-				  options.TimestampsHash)
+				  options.TimestampsSet)
 		{
 		}
 	}
