@@ -24,25 +24,32 @@ def redis_db():
 
 def get_recognition_queue(db: redis.Redis): 
     task_queue = reliable_queue.ReliableQueue(db,
+        Config.redis_task_description_hash_name,
+        Config.redis_task_status_hash_name,
+        9,
         Config.redis_recognition_queue_name,
         Config.redis_temp_recognition_queue_name,
-        Config.redis_timestamps_recognition_hash_name
+        Config.redis_timestamps_recognition_set_name
     )
 
     return task_queue
 
 def get_command_handling_queue(db: redis.Redis): 
     task_queue = reliable_queue.ReliableQueue(db,
+        Config.redis_task_description_hash_name,
+        Config.redis_task_status_hash_name,
+        1,
         Config.redis_command_handling_queue_name,
         Config.redis_temp_command_handling_queue_name,
-        Config.redis_timestamps_command_handling_hash_name
+        Config.redis_timestamps_command_handling_set_name
     )
 
     return task_queue
 
-def parse_recognition_task(task):
+def get_task_description(db: redis.Redis, task_id):
+    task = db.hget(Config.redis_task_description_hash_name, task_id)
     data = json.loads(task)
-    return data['Id'], data['User'], data['Uri']
+    return data['Id'], data['User'], data['Status'], data['Content']
 
 def open_sftp():
     ssh_client = paramiko.SSHClient()
@@ -63,7 +70,8 @@ def create_command_handling_task(task_id, user, recognized_text):
     data = {
         "Id": task_id,
         "User": user,
-        "Text": recognized_text
+        "Status": 1,
+        "Content": recognized_text
         }
 
     return json.dumps(data)
@@ -77,13 +85,13 @@ def main():
     ai_model = whisper.load_model(name = "small")
 
     while True:
-        recog_task = recog_queue.dequeue()
-        if recog_task is None:
+        recog_task_id = recog_queue.dequeue()
+        if recog_task_id is None:
             backof.wait()
             continue
 
         backof.reset()
-        task_id, user, audio_url = parse_recognition_task(recog_task)
+        task_id, user, status, audio_url = get_task_description(recog_task_id)
 
         ssh_client, sftp = open_sftp()
 
@@ -94,13 +102,11 @@ def main():
             recognized_text = ai_model.transcribe(tmp.name)
             command_task = create_command_handling_task(task_id, user, recognized_text)
 
-            try:
-                handling_queue.enqueue(command_task)
-                recog_queue.mark_completed(recog_task)
-            except redis.exceptions.RedisError as e:
-                pass
+            enq_res = handling_queue.enqueue(task_id, command_task)
+            recog_queue.mark_completed(recog_task_id)
 
-            sftp.remove(audio_url)
+            if enq_res > 0:
+                sftp.remove(audio_url)
 
         sftp.close()
         ssh_client.close()

@@ -32,6 +32,7 @@
     <Content Include="Dockerfile" />
     <Content Include="Lua\ReliableQueue\Dequeue.lua" />
     <Content Include="Lua\ReliableQueue\MarkAsCompleted.lua" />
+    <Content Include="Lua\ReliableQueue\Enqueue.lua" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
