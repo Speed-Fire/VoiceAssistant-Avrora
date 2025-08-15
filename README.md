@@ -33,7 +33,7 @@ The server performs the following pipeline:
 
 This server works together with:
 
-- **Client Application** – Receives user voice input and sends data to the server.
+- [**Client Application**](https://github.com/Speed-Fire/VoiceAssistant-Avrora-Client) – Receives user voice input and sends data to the server.
 - **Device Controllers / Executors** – Carry out actions based on interpreted commands.
 
 For the full functionality of **VoiceAssistant Avrora**, all components must be deployed and properly connected.
