@@ -31,7 +31,7 @@ namespace VoiceAssistant.Server
                 .AddLuaScripts();
 
             builder.Services
-                .AddSingleton<ConnectionMultiplexer>(provider =>
+                .AddSingleton<IConnectionMultiplexer>(provider =>
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
 
