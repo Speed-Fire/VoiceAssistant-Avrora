@@ -47,7 +47,7 @@ namespace VoiceAssistant.Server
 
                     return ConnectionMultiplexer.Connect(redis_config);
                 })
-                .AddKeyedTransient<SftpClient>("AudioFTP", (provider, key) =>
+                .AddKeyedTransient<SftpClient>(DIConsts.KEY_FTP_AUDIO, (provider, key) =>
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
                     var host = config["SFTP_HOST"];

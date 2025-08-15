@@ -29,7 +29,7 @@ namespace VoiceAssistant.Server.Services
 
 		public CommandHandlingService(
 			ConnectionMultiplexer redis,
-			[FromKeyedServices("AudioFTP")] SftpClient audioFTP,
+			[FromKeyedServices(DIConsts.KEY_FTP_AUDIO)] SftpClient audioFTP,
 			[FromKeyedServices(DIConsts.KEY_LUA_PUSH_RECOGNITION_TASK)] LoadedLuaScript pushRecognitionTaskScript,
 			TasksDataOptions tasksData,
 			RecognitionQueueOptions recognitionQueue)
