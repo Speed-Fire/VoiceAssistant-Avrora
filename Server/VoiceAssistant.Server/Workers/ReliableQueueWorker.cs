@@ -8,19 +8,18 @@ namespace VoiceAssistant.Server.Workers
 	public class ReliableQueueWorker : BackgroundService
 	{
 		private readonly IConnectionMultiplexer _redis;
-			
+		private readonly LoadedLuaScript _moveBackToPendingScript;
+
 		private readonly int _tempEntryLifetime;
 
 		private readonly string _pendingQueue;
 		private readonly string _prosessingQueue;
 		private readonly string _timestampsSet;
 
-		private LoadedLuaScript _moveBackToPendingScript;
-
 		public ReliableQueueWorker(
 			IConnectionMultiplexer redis,
 			IConfiguration config,
-			[FromKeyedServices(DIConsts.KEY_LUA_MOVE_BACK_TO_PENDING)] LoadedLuaScript moveBackToPendingScript,
+			LoadedLuaScript moveBackToPendingScript,
 			string pendingQueue,
 			string prosessinggQueue,
 			string timestampsSet)
