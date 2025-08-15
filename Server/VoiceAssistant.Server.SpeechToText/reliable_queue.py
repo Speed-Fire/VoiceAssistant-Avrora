@@ -38,7 +38,7 @@ class ReliableQueue(object):
         #self.__db.lpush(self.__pending_queue, item)
 
     def dequeue(self):
-        item = self.__deq_script.call([self.__pending_queue, self.__processing_queue, self.__timestamps_set], [])
+        item = self.__deq_script.call([self.__pending_queue, self.__processing_queue, self.__timestamps_set, self.__items_status_hash], [self.__req_status_to_enq])
         return item
 
     def mark_completed(self, item):
