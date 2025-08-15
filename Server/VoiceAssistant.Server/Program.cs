@@ -1,5 +1,9 @@
 using Renci.SshNet;
 using StackExchange.Redis;
+using System.Reflection;
+using System.Threading;
+using VoiceAssistant.Server.Extensions;
+using VoiceAssistant.Server.Misc;
 using VoiceAssistant.Server.Options;
 using VoiceAssistant.Server.Services;
 using VoiceAssistant.Server.Workers;
@@ -8,7 +12,7 @@ namespace VoiceAssistant.Server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,9 @@ namespace VoiceAssistant.Server
             builder.Services
                 .AddHostedService<RecognitionQueueWorker>()
                 .AddHostedService<CommandHandlingQueueWorker>();
+
+            builder.Services
+                .AddLuaScripts();
 
             builder.Services
                 .AddSingleton<ConnectionMultiplexer>(provider =>
@@ -52,6 +59,9 @@ namespace VoiceAssistant.Server
                 });
 
             var app = builder.Build();
+
+            var luaPreparer = app.Services.GetRequiredService<LuaScriptStoragePreparer>();
+            await luaPreparer.Prepare();
 
             // Configure the HTTP request pipeline.
             app.MapGrpcService<CommandHandlingService>();
