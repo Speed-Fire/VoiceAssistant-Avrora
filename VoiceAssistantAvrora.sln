@@ -9,6 +9,14 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "VoiceAssistant.Server.SpeechToText", "Server\VoiceAssistant.Server.SpeechToText\VoiceAssistant.Server.SpeechToText.pyproj", "{BDAA7D23-BEE9-46D0-B33D-E3289E6D72A9}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "VoiceAssistant.Server.Database", "Server\VoiceAssistant.Server.Database\VoiceAssistant.Server.Database.sqlproj", "{478437B9-0931-4A54-879A-551C44BB39F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db-inition", "db-inition", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+	ProjectSection(SolutionItems) = preProject
+		db-inition\Dockerfile = db-inition\Dockerfile
+		db-inition\init-db.sh = db-inition\init-db.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +33,12 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BDAA7D23-BEE9-46D0-B33D-E3289E6D72A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BDAA7D23-BEE9-46D0-B33D-E3289E6D72A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478437B9-0931-4A54-879A-551C44BB39F2}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
