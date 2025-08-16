@@ -7,13 +7,25 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# Separate cache for Whisper to avoid touching pip/torch caches
+ENV XDG_CACHE_HOME=/opt/whisper-cache
+
+#RUN rm -rf /home/appuser/.cache/whisper
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 # Install pip requirements
 COPY ["Server/VoiceAssistant.Server.SpeechToText/requirements.txt", "./Server/VoiceAssistant.Server.SpeechToText/"]
-RUN python -m pip install -r ./Server/VoiceAssistant.Server.SpeechToText/requirements.txt
+RUN python -m pip install --no-cache-dir -r ./Server/VoiceAssistant.Server.SpeechToText/requirements.txt
+
+# =============================
+# Pre-download Whisper model during build
+# =============================
+RUN python3 - <<EOF
+import whisper
+whisper.load_model("small")  # скачиваем модель один раз
+EOF
 
 COPY "./Server/VoiceAssistant.Server.SpeechToText/" /app
 
