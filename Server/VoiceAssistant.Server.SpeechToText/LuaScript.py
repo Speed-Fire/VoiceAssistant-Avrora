@@ -18,7 +18,7 @@ class LuaScript(object):
 
         if self.__sha is None:
             self._load_script()
-
+        
         try:
             return self.__db.evalsha(self.__sha, len(keys), *(keys + args))
         except redis.ResponseError as e:

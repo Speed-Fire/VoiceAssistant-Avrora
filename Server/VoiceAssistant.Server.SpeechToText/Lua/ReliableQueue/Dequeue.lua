@@ -5,7 +5,7 @@
 --
 -- ARGV[1] - required status to return task instead of removing
 
-local task_id = redis.call('LMOVE', KEYS[1], KEYS[2], 'RIGHT', 'LEFT', 0)
+local task_id = redis.call('LMOVE', KEYS[1], KEYS[2], 'RIGHT', 'LEFT')
 if not task_id then
 	return nil
 end
