@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "VoiceAssistant.Server";
+
+package Registration;
+
+service Registration{
+	rpc Register (RegistrationRequest) returns (RegistrationReply);
+}
+
+message RegistrationRequest{
+	string Username = 1;
+	string Password = 2;
+	string ClientId = 3;
+}
+
+message RegistrationReply{
+	int32 Status = 1;
+	string Message = 2;
+}

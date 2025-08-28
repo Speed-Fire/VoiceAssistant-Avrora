@@ -1,0 +1,51 @@
+{
+  "realm": "Avrora-realm",
+  "enabled": true,
+
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "resetPasswordAllowed": true,
+
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "User with maximal priveleges."
+      },
+      {
+        "name": "user",
+        "description": "Standard level of priveleges."
+      }
+    ]
+  },
+
+  "clients": [
+    {
+      "clientId": "avrora_client",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "some secret i don't know",
+      "redirectUris": [ "*" ],
+      "defaultRoles": [ "user" ],
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true
+    },
+    {
+      "clientId": "admin-cli",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "some secret i don't know",
+      "redirectUris": [],
+      "defaultRoles": [ "admin" ],
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "attributes": {
+        "use.jwks.url": "true",
+        "display.on.consent.screen": "false"
+      }
+    }
+  ]
+}

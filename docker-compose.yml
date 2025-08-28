@@ -21,7 +21,7 @@ services:
         ports:
             - "${SFTP_PORT}:22"
         volumes:
-            - ./users/AudioUser:/home/AudioUser/upload
+            - ./volumes/users/AudioUser:/home/AudioUser/upload
         command: >
             AudioUser:12345:::upload
 
@@ -67,6 +67,36 @@ services:
             - .env
         volumes:
             - sql-data:/var/opt/mssql
+
+    auth_db:
+        image: postgres:15
+        restart: always
+        environment:
+            POSTGRES_DB: "${AUTH_DB_NAME}"
+            POSTGRES_USER: "${AUTH_DB_USER}"
+            POSTGRES_PASSWORD: "${AUTH_DB_PASSWORD}"
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./volumes/pgdata:/var/lib/postgresql/data
+
+    auth_server:
+        image: quay.io/keycloak/keycloak:25.0
+        command: start-dev --import-realm
+        depends_on:
+            auth_db:
+                condition: service_started
+        ports:
+            - "8080:8080"
+        environment:
+            KC_DB: postgres
+            KC_DB_URL: jdbc:postgresql://auth_db:5432/keycloak
+            KC_DB_USERNAME: "${AUTH_DB_USER}"
+            KC_DB_PASSWORD: "${AUTH_DB_PASSWORD}"
+            KEYCLOAK_ADMIN: "${AUTH_SERVER_ADMIN}"
+            KEYCLOAK_ADMIN_PASSWORD: "${AUTH_SERVER_ADMIN_PASSWORD}"
+        volumes:
+            - ./realms:/opt/keycloak/data/import
 
 volumes:
     sql-data:

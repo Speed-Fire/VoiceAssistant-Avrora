@@ -13,6 +13,7 @@
   <ItemGroup>
     <None Remove="Lua\ReliableQueue\MoveBackToPending.lua" />
     <None Remove="Protos\CommandHandling.proto" />
+    <None Remove="Protos\Registration.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,11 +22,14 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\CommandHandling.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\Registration.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+    <PackageReference Include="OneOf" Version="3.0.271" />
     <PackageReference Include="SSH.NET" Version="2025.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.58" />
   </ItemGroup>

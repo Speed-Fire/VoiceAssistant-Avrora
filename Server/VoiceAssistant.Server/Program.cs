@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Renci.SshNet;
 using StackExchange.Redis;
 using System.Reflection;
@@ -5,6 +6,7 @@ using System.Threading;
 using VoiceAssistant.Server.Extensions;
 using VoiceAssistant.Server.Misc;
 using VoiceAssistant.Server.Options;
+using VoiceAssistant.Server.RestClients;
 using VoiceAssistant.Server.Services;
 using VoiceAssistant.Server.Workers;
 
@@ -16,12 +18,33 @@ namespace VoiceAssistant.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var config = builder.Configuration;
+
             // Add services to the container.
             builder.Services.AddGrpc();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = config["AUTH_SERVER_ADDRESS"]!;    
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = true
+                    };
+                    
+                });
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddHttpClient<KeycloakClient>(client =>
+            {
+				client.BaseAddress = new Uri(config["AUTH_SERVER_ADDRESS"]!);
+				client.DefaultRequestHeaders.Add("Accept", "application/json");
+			});
 
             builder.Services
                 .Configure<RecognitionQueueOptions>(builder.Configuration)
-                .Configure<CommandHandlingQueueOptions>(builder.Configuration);
+                .Configure<CommandHandlingQueueOptions>(builder.Configuration)
+                .Configure<KeycloakOptions>(builder.Configuration);
 
             builder.Services
                 .AddHostedService<RecognitionQueueWorker>()
@@ -29,6 +52,9 @@ namespace VoiceAssistant.Server
 
             builder.Services
                 .AddLuaScripts();
+
+            builder.Services
+                .AddSingleton<KeycloakClient>();
 
             builder.Services
                 .AddSingleton<IConnectionMultiplexer>(provider =>
@@ -64,7 +90,11 @@ namespace VoiceAssistant.Server
             await luaPreparer.Prepare();
 
             // Configure the HTTP request pipeline.
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapGrpcService<CommandHandlingService>();
+            app.MapGrpcService<RegistrationService>();
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
             app.Run();
