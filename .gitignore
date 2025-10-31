@@ -19,6 +19,7 @@
 mono_crash.*
 
 volumes/
+.env
 
 # Build results
 [Dd]ebug/
