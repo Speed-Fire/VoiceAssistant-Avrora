@@ -21,23 +21,12 @@
 
   "clients": [
     {
-      "clientId": "avrora_client",
-      "enabled": true,
-      "protocol": "openid-connect",
-      "publicClient": false,
-      "secret": "some secret i don't know",
-      "redirectUris": [ "*" ],
-      "defaultRoles": [ "user" ],
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true
-    },
-    {
-      "clientId": "admin-cli",
+      "clientId": "${AUTH_CLIENT_ADMIN_ID}",
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "some secret i don't know",
+      "secret": "${AUTH_CLIENT_ADMIN_SECRET}",
       "redirectUris": [],
       "defaultRoles": [ "admin" ],
       "directAccessGrantsEnabled": true,

@@ -60,17 +60,19 @@ services:
             dockerfile: db-inition/Dockerfile
         ports:
             - "1433:1433"
+        env_file:
+            - .env
         environment:
             ACCEPT_EULA: "Y"
             MSSQL_SA_PASSWORD: "${DATABASE_PASSWORD}"
-        env_file:
-            - .env
         volumes:
             - sql-data:/var/opt/mssql
 
     auth_db:
         image: postgres:15
         restart: always
+        env_file:
+            - .env
         environment:
             POSTGRES_DB: "${AUTH_DB_NAME}"
             POSTGRES_USER: "${AUTH_DB_USER}"
@@ -81,7 +83,14 @@ services:
             - ./volumes/pgdata:/var/lib/postgresql/data
 
     auth_server:
-        image: quay.io/keycloak/keycloak:25.0
+        env_file:
+            - .env
+        build:
+            context: .
+            dockerfile: Keycloak/Dockerfile
+            args:
+                AUTH_CLIENT_ADMIN_ID: ${AUTH_CLIENT_ADMIN_ID}
+                AUTH_CLIENT_ADMIN_SECRET: ${AUTH_CLIENT_ADMIN_SECRET}
         command: start-dev --import-realm
         depends_on:
             auth_db:
@@ -96,7 +105,7 @@ services:
             KEYCLOAK_ADMIN: "${AUTH_SERVER_ADMIN}"
             KEYCLOAK_ADMIN_PASSWORD: "${AUTH_SERVER_ADMIN_PASSWORD}"
         volumes:
-            - ./realms:/opt/keycloak/data/import
+            - ./volumes/Keycloak/:/opt/keycloak/data/import/
 
 volumes:
     sql-data:

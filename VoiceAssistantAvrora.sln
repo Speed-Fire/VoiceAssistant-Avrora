@@ -17,9 +17,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db-inition", "db-inition", 
 		db-inition\init-db.sh = db-inition\init-db.sh
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realms", "realms", "{CEFF1122-D6BB-49F9-9D1D-746F3947C958}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Keycloak", "Keycloak", "{42C60D78-329B-4FC3-B30F-7F77869FF015}"
 	ProjectSection(SolutionItems) = preProject
-		realms\voice_assistant_realm.json = realms\voice_assistant_realm.json
+		Keycloak\Dockerfile = Keycloak\Dockerfile
+		Keycloak\prepare-realms.sh = Keycloak\prepare-realms.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realms", "realms", "{B113C54F-54AB-4343-AAA1-8B7CB97A3A25}"
+	ProjectSection(SolutionItems) = preProject
+		Keycloak\realms\avrora_realm.template.json = Keycloak\realms\avrora_realm.template.json
 	EndProjectSection
 EndProject
 Global
@@ -47,6 +53,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B113C54F-54AB-4343-AAA1-8B7CB97A3A25} = {42C60D78-329B-4FC3-B30F-7F77869FF015}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C32B1D8E-1EB3-49E4-83B3-84ADE22DE98D}
