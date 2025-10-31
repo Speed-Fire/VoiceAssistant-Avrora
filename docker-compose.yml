@@ -34,6 +34,26 @@ services:
         command: 
             redis-server --save 20 1 --loglevel warning --requirepass "${REDIS_PASSWORD}"
         
+    redis-init:
+        image: "redis:8"
+        restart: no
+        depends_on:
+            redis:
+                condition: service_started
+        entrypoint: ["/bin/sh", "-c"]
+        command: >
+                 "
+                 until redis-cli -h redis -a ${REDIS_PASSWORD} ping; do sleep 1; done;
+                 
+                 redis-cli -h redis -a ${REDIS_PASSWORD} XGROUP CREATE ${REDIS_STREAM_STT} ${REDIS_STREAM_STT_GROUP} MKSTREAM 2>/dev/null \
+                 || echo '${REDIS_STREAM_STT_GROUP} exists';
+
+                 redis-cli -h redis -a ${REDIS_PASSWORD} XGROUP CREATE ${REDIS_STREAM_CH} ${REDIS_STREAM_CH_GROUP} MKSTREAM 2>/dev/null \
+                 || echo '${REDIS_STREAM_CH_GROUP} exists';
+
+                 redis-cli -h redis -a ${REDIS_PASSWORD} XGROUP CREATE ${REDIS_STREAM_COM_RES} ${REDIS_STREAM_COM_RES_GROUP} MKSTREAM 2>/dev/null \
+                 || echo '${REDIS_STREAM_COM_RES_GROUP} exists';
+                 "
 
     recognition_worker:
         image: pythondocker
