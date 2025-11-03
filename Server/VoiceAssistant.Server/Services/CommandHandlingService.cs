@@ -8,6 +8,7 @@ using System.Text.Json.Nodes;
 using VoiceAssistant.Server;
 using VoiceAssistant.Server.Extensions;
 using VoiceAssistant.Server.Services.Abstract;
+using VoiceAssistant.Server.Services.Dtos;
 
 namespace VoiceAssistant.Server.Services
 {
@@ -21,16 +22,24 @@ namespace VoiceAssistant.Server.Services
 		}
 
 		[Authorize]
-		public override async Task Handle(
+		public override async Task<CommandReply> Handle(
 			CommandRequest request,
-			IServerStreamWriter<CommandReply> responseStream,
 			ServerCallContext context)
 		{
 			var user = context.GetHttpContext().User.FindFirstValue("sub");
 			var audio = new MemoryStream();
 			request.Audio.WriteTo(audio);
 
-			await _commandHandlingService.Handle(user, audio, context.CancellationToken);
+			var createDto = new CreateCommandTaskDto()
+			{
+				User = user!,
+				Audio = audio,
+			};
+
+			var res =
+				await _commandHandlingService.Handle(createDto, context.CancellationToken);
+
+			return new() { PendingCommandTaskId = res.TaskId.ToString() };
 		}
 	}
 }

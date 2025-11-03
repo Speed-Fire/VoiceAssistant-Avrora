@@ -7,7 +7,7 @@ package CommandHandling;
 import "google/protobuf/wrappers.proto";
 
 service CommandHandler{
-	rpc Handle (CommandRequest) returns (stream CommandReply);
+	rpc Handle (CommandRequest) returns (CommandReply);
 }
 
 message CommandRequest{
@@ -15,5 +15,5 @@ message CommandRequest{
 }
 
 message CommandReply{
-	string command = 1;
+	string pendingCommandTaskId = 1;
 }
