@@ -12,13 +12,6 @@ namespace VoiceAssistant.Server.Services.Extensions
 {
 	public static class DIExtensions
 	{
-		public static IServiceCollection AddLuaScripts(this IServiceCollection services)
-		{
-			services
-				.AddLuaScript(DIConsts.KEY_LUA_MOVE_BACK_TO_PENDING, "VoiceAssistant.Server.Services.Lua.ReliableQueue.MoveBackToPending.lua")
-				.AddLuaScript(DIConsts.KEY_LUA_PUSH_RECOGNITION_TASK, "VoiceAssistant.Server.Services.Lua.ReliableQueue.MoveBackToPending.lua");
-
-			return services;
-		}
+		
 	}
 }

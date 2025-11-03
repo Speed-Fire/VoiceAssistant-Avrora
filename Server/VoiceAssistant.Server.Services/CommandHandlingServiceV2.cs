@@ -25,7 +25,6 @@ namespace VoiceAssistant.Server.Services
 		public CommandHandlingServiceV2(
 			ConnectionMultiplexer redis,
 			[FromKeyedServices(DIConsts.KEY_FTP_AUDIO)] SftpClient audioFTP,
-			[FromKeyedServices(DIConsts.KEY_LUA_PUSH_RECOGNITION_TASK)] LoadedLuaScript pushRecognitionTaskScript,
 			CommandHandlingStreamOptions streamOptions)
 		{
 			_redis = redis;

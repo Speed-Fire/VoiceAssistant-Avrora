@@ -30,9 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Domain\VoiceAssistant.Server.Domain.csproj" />
-    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Redis\VoiceAssistant.Server.Redis.csproj" />
-    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Services\VoiceAssistant.Server.Services.csproj" />
+    <ProjectReference Include="..\VoiceAssistant.Server.Domain\VoiceAssistant.Server.Domain.csproj" />
+    <ProjectReference Include="..\VoiceAssistant.Server.Redis\VoiceAssistant.Server.Redis.csproj" />
+    <ProjectReference Include="..\VoiceAssistant.Server.Services\VoiceAssistant.Server.Services.csproj" />
   </ItemGroup>
 
 </Project>

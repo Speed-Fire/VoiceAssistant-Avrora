@@ -9,10 +9,10 @@ namespace VoiceAssistant.Server.Domain.Options
 {
 	public class CommandHandlingStreamOptions
 	{
-		[ConfigurationKeyName("REDIS_STREAM_STT")]
+		[ConfigurationKeyName("REDIS_STREAMS_STT")]
 		public string Stream { get; set; } = string.Empty;
 
-		[ConfigurationKeyName("REDIS_STREAM_STT_GROUP")]
+		[ConfigurationKeyName("REDIS_STREAMS_STT_GROUP")]
 		public string Group { get; set; } = string.Empty;
 	}
 }

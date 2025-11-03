@@ -4,16 +4,13 @@ using Renci.SshNet;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Threading;
-using VoiceAssistant.Server.Domain;
-using VoiceAssistant.Server.Domain.Options;
-using VoiceAssistant.Server.Extensions;
-using VoiceAssistant.Server.Redis;
 using VoiceAssistant.Server.Redis.Extensions;
+using VoiceAssistant.Server.Domain.Options;
+using VoiceAssistant.Server.Services.Extensions;
 using VoiceAssistant.Server.RestClients;
 using VoiceAssistant.Server.Services;
-using VoiceAssistant.Server.Services.Extensions;
-using VoiceAssistant.Server.Services.Workers;
-using VoiceAssistant.Server.Workers;
+using VoiceAssistant.Server.Domain;
+using VoiceAssistant.Server.Redis;
 
 namespace VoiceAssistant.Server
 {
@@ -47,17 +44,10 @@ namespace VoiceAssistant.Server
 			});
 
             builder.Services
-                .Configure<RecognitionQueueOptions>(builder.Configuration)
-                .Configure<CommandHandlingQueueOptions>(builder.Configuration)
                 .Configure<KeycloakOptions>(builder.Configuration);
 
             builder.Services
-                .AddHostedService<RecognitionQueueWorker>()
-                .AddHostedService<CommandHandlingQueueWorker>();
-
-            builder.Services
-                .AddLuaScriptServices()
-                .AddLuaScripts();
+                .AddLuaScriptServices();
 
             builder.Services
                 .AddSingleton<KeycloakClient>();
