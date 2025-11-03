@@ -16,6 +16,10 @@ redis_command_handling_queue_name = os.getenv("REDIS_QUEUES_COMMAND_HANDLING_PEN
 redis_temp_command_handling_queue_name = os.getenv("REDIS_QUEUES_COMMAND_HANDLING_PROCESSING")
 redis_timestamps_command_handling_set_name = os.getenv("REDIS_SETS_COMMAND_HANDLING_TIMESTAMPS")
 
+redis_stream_audio = os.getenv("REDIS_STREAM_STT")
+redis_stream_audio_group = os.getenv("REDIS_STREAM_STT_GROUP")
+redis_stream_command = os.getenv("REDIS_STREAM_CH")
+
 sftp_ip = os.getenv("SFTP_HOST")
 sftp_port = int(os.getenv("SFTP_PORT"))
 sftp_username = os.getenv("SFTP_USERS_AUDIO_NAME")
