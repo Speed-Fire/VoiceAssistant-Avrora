@@ -28,11 +28,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "realms", "realms", "{B113C5
 		Keycloak\realms\avrora_realm.template.json = Keycloak\realms\avrora_realm.template.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Services", "..\VoiceAssistant.Server.Services\VoiceAssistant.Server.Services.csproj", "{773BF042-73B9-4DD4-B439-DA28CAC8E610}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Services", "Server\VoiceAssistant.Server.Services\VoiceAssistant.Server.Services.csproj", "{773BF042-73B9-4DD4-B439-DA28CAC8E610}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Domain", "..\VoiceAssistant.Server.Domain\VoiceAssistant.Server.Domain.csproj", "{3ACDB891-97A1-4620-8997-825E7CFF44D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Domain", "Server\VoiceAssistant.Server.Domain\VoiceAssistant.Server.Domain.csproj", "{3ACDB891-97A1-4620-8997-825E7CFF44D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Redis", "..\VoiceAssistant.Server.Redis\VoiceAssistant.Server.Redis.csproj", "{514A19E7-A474-4A1E-B438-5DC48E2BFC34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceAssistant.Server.Redis", "Server\VoiceAssistant.Server.Redis\VoiceAssistant.Server.Redis.csproj", "{514A19E7-A474-4A1E-B438-5DC48E2BFC34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

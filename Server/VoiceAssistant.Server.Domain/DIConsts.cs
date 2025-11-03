@@ -1,0 +1,9 @@
+﻿namespace VoiceAssistant.Server.Domain
+{
+	public static class DIConsts
+	{
+		public const string KEY_LUA_PUSH_RECOGNITION_TASK = "Lua:PushRecognitionTask";
+		public const string KEY_LUA_MOVE_BACK_TO_PENDING = "Lua:MoveBackToPending";
+		public const string KEY_FTP_AUDIO = "Ftp:Audio";
+	}
+}
