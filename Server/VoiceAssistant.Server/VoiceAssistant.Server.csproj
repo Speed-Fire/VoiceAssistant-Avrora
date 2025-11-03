@@ -11,13 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Lua\ReliableQueue\MoveBackToPending.lua" />
     <None Remove="Protos\CommandHandling.proto" />
     <None Remove="Protos\Registration.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Lua\ReliableQueue\MoveBackToPending.lua" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,8 +25,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="OneOf" Version="3.0.271" />
-    <PackageReference Include="SSH.NET" Version="2025.0.0" />
+    <PackageReference Include="SSH.NET" Version="2025.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.58" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Domain\VoiceAssistant.Server.Domain.csproj" />
+    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Redis\VoiceAssistant.Server.Redis.csproj" />
+    <ProjectReference Include="..\..\..\VoiceAssistant.Server.Services\VoiceAssistant.Server.Services.csproj" />
   </ItemGroup>
 
 </Project>

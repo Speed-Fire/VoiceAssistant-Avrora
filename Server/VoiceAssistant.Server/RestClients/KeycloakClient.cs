@@ -3,7 +3,7 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using VoiceAssistant.Server.Options;
+using VoiceAssistant.Server.Domain.Options;
 
 namespace VoiceAssistant.Server.RestClients
 {

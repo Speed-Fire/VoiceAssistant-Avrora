@@ -1,13 +1,18 @@
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Renci.SshNet;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Threading;
+using VoiceAssistant.Server.Domain;
+using VoiceAssistant.Server.Domain.Options;
 using VoiceAssistant.Server.Extensions;
-using VoiceAssistant.Server.Misc;
-using VoiceAssistant.Server.Options;
+using VoiceAssistant.Server.Redis;
+using VoiceAssistant.Server.Redis.Extensions;
 using VoiceAssistant.Server.RestClients;
 using VoiceAssistant.Server.Services;
+using VoiceAssistant.Server.Services.Extensions;
+using VoiceAssistant.Server.Services.Workers;
 using VoiceAssistant.Server.Workers;
 
 namespace VoiceAssistant.Server
@@ -51,6 +56,7 @@ namespace VoiceAssistant.Server
                 .AddHostedService<CommandHandlingQueueWorker>();
 
             builder.Services
+                .AddLuaScriptServices()
                 .AddLuaScripts();
 
             builder.Services
@@ -86,8 +92,7 @@ namespace VoiceAssistant.Server
 
             var app = builder.Build();
 
-            var luaPreparer = app.Services.GetRequiredService<LuaScriptStoragePreparer>();
-            await luaPreparer.Prepare();
+            await PrepareLuaScripts(app.Services);
 
             // Configure the HTTP request pipeline.
             app.UseAuthentication();
@@ -99,5 +104,12 @@ namespace VoiceAssistant.Server
 
             app.Run();
         }
+
+        private static async Task PrepareLuaScripts(IServiceProvider services)
+        {
+            using var redis = services.GetRequiredService<IConnectionMultiplexer>();
+			var luaPreparer = services.GetRequiredService<LuaScriptStoragePreparer>();
+			await luaPreparer.Prepare(redis);
+		}
     }
 }
