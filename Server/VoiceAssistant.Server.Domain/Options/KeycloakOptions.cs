@@ -4,10 +4,10 @@ namespace VoiceAssistant.Server.Domain.Options
 {
 	public class KeycloakOptions
 	{
-		[ConfigurationKeyName("")]
+		[ConfigurationKeyName("AUTH_CLIENT_ADMIN_ID")]
 		public string AdminId { get; set; } = string.Empty;
 
-		[ConfigurationKeyName("")]
+		[ConfigurationKeyName("AUTH_CLIENT_ADMIN_SECRET")]
 		public string AdminSecret { get; set; } = string.Empty;
 	}
 }
