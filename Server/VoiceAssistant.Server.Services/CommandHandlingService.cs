@@ -16,13 +16,13 @@ using VoiceAssistant.Server.Services.Extensions;
 
 namespace VoiceAssistant.Server.Services
 {
-	internal class CommandHandlingServiceV2 : ICommandHandlingService
+	internal class CommandHandlingService : ICommandHandlingService
 	{
 		private readonly ConnectionMultiplexer _redis;
 		private readonly SftpClient _audioFTP;
 		private readonly CommandHandlingStreamOptions _streamOptions;
 
-		public CommandHandlingServiceV2(
+		public CommandHandlingService(
 			ConnectionMultiplexer redis,
 			[FromKeyedServices(DIConsts.KEY_FTP_AUDIO)] SftpClient audioFTP,
 			CommandHandlingStreamOptions streamOptions)

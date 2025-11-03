@@ -36,6 +36,7 @@ namespace VoiceAssistant.Server
                     
                 });
             builder.Services.AddAuthorization();
+            builder.Services.AddServices();
 
             builder.Services.AddHttpClient<KeycloakClient>(client =>
             {
