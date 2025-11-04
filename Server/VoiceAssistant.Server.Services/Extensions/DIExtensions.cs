@@ -16,7 +16,8 @@ namespace VoiceAssistant.Server.Services.Extensions
 		public static IServiceCollection AddServices(this IServiceCollection services)
 		{
 			services
-				.AddTransient<ICommandHandlingService, CommandHandlingService>();
+				.AddTransient<ICommandHandlingService, CommandHandlingService>()
+				.AddTransient<ICommandTaskService, CommandTaskService>();
 
 			return services;
 		}

@@ -11,6 +11,8 @@ using VoiceAssistant.Server.RestClients;
 using VoiceAssistant.Server.Services;
 using VoiceAssistant.Server.Domain;
 using VoiceAssistant.Server.Redis;
+using VoiceAssistant.Server.Hubs;
+using VoiceAssistant.Server.Workers;
 
 namespace VoiceAssistant.Server
 {
@@ -37,6 +39,7 @@ namespace VoiceAssistant.Server
                 });
             builder.Services.AddAuthorization();
             builder.Services.AddServices();
+            builder.Services.AddSignalR();
 
             builder.Services.AddHttpClient<KeycloakClient>(client =>
             {
@@ -45,14 +48,16 @@ namespace VoiceAssistant.Server
 			});
 
             builder.Services
-                .Configure<KeycloakOptions>(builder.Configuration);
+                .Configure<KeycloakOptions>(builder.Configuration)
+                .Configure<CommandHandlingStreamOptions>(builder.Configuration)
+                .Configure<CompletedCommandTaskChannelOptions>(builder.Configuration);
 
             builder.Services
                 .AddLuaScriptServices();
 
             builder.Services
                 .AddSingleton<KeycloakClient>();
-
+            
             builder.Services
                 .AddSingleton<IConnectionMultiplexer>(provider =>
                 {
@@ -81,6 +86,8 @@ namespace VoiceAssistant.Server
                     return new SftpClient(host!, port, username!, password!);
                 });
 
+            builder.Services.AddHostedService<CommandTaskListener>();
+
             var app = builder.Build();
 
             await PrepareLuaScripts(app.Services);
@@ -88,6 +95,9 @@ namespace VoiceAssistant.Server
             // Configure the HTTP request pipeline.
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseRouting();
+
+            app.MapHub<CommandTaskHub>("/command-tasks-hub");
 
             app.MapGrpcService<CommandHandlingService>();
             app.MapGrpcService<RegistrationService>();

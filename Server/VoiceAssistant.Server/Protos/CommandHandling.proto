@@ -12,6 +12,7 @@ service CommandHandler{
 
 message CommandRequest{
 	google.protobuf.BytesValue audio = 1;
+	string signalrconnection = 2;
 }
 
 message CommandReply{

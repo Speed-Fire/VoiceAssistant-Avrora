@@ -18,18 +18,15 @@ namespace VoiceAssistant.Server.Services
 {
 	internal class CommandHandlingService : ICommandHandlingService
 	{
-		private readonly ConnectionMultiplexer _redis;
 		private readonly SftpClient _audioFTP;
-		private readonly CommandHandlingStreamOptions _streamOptions;
+		private readonly ICommandTaskService _taskService;
 
 		public CommandHandlingService(
-			ConnectionMultiplexer redis,
 			[FromKeyedServices(DIConsts.KEY_FTP_AUDIO)] SftpClient audioFTP,
-			CommandHandlingStreamOptions streamOptions)
+			ICommandTaskService taskService)
 		{
-			_redis = redis;
 			_audioFTP = audioFTP;
-			_streamOptions = streamOptions;
+			_taskService = taskService;
 		}
 
 		public async Task<PendingCommandTaskDto> Handle(CreateCommandTaskDto createDto, CancellationToken cancellationToken = default)
@@ -45,7 +42,9 @@ namespace VoiceAssistant.Server.Services
 				AudioUrl = audioUrl,
 			};
 
-			await EnqueueRecognitionTask(comTask);
+			await _taskService.RegisterTask(taskId.ToString(), createDto.SignalRConnection,
+				cancellationToken);
+			await _taskService.PushTask(comTask, cancellationToken);
 
 			return new() { TaskId = taskId };
 		}
@@ -60,17 +59,6 @@ namespace VoiceAssistant.Server.Services
 			_audioFTP.Disconnect();
 
 			return path;
-		}
-
-		private async Task EnqueueRecognitionTask(CommandTask comTask)
-		{
-			var json = JsonSerializer.Serialize(comTask);
-
-			var db = _redis.GetDatabase();
-
-			await db.StreamAddAsync(_streamOptions.Stream, [
-				new("payload", json)
-				]);
 		}
 	}
 }

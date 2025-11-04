@@ -34,6 +34,7 @@ namespace VoiceAssistant.Server.Services
 			{
 				User = user!,
 				Audio = audio,
+				SignalRConnection = request.Signalrconnection
 			};
 
 			var res =

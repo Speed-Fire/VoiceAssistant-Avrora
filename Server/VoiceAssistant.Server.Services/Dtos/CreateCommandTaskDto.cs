@@ -8,7 +8,8 @@ namespace VoiceAssistant.Server.Services.Dtos
 {
 	public class CreateCommandTaskDto
 	{
-		public required string User { get; set; }
-		public required MemoryStream Audio { get; set; }
+		public required string User { get; init; }
+		public required string SignalRConnection { get; init; }
+		public required MemoryStream Audio { get; init; }
 	}
 }
