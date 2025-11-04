@@ -50,9 +50,6 @@ services:
 
                  redis-cli -h redis -a ${REDIS_PASSWORD} XGROUP CREATE ${REDIS_STREAM_CH} ${REDIS_STREAM_CH_GROUP} MKSTREAM 2>/dev/null \
                  || echo '${REDIS_STREAM_CH_GROUP} exists';
-
-                 redis-cli -h redis -a ${REDIS_PASSWORD} XGROUP CREATE ${REDIS_STREAM_COM_RES} ${REDIS_STREAM_COM_RES_GROUP} MKSTREAM 2>/dev/null \
-                 || echo '${REDIS_STREAM_COM_RES_GROUP} exists';
                  "
 
     recognition_worker:
