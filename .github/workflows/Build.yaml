@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         service:
-          - { name: "Avrora/web-api", path: "Server/VoiceAssistant.Server/"}
-          - { name: "Avrora/worker-s2t", path: "Server/VoiceAssistant.Server.SpeechToText/"}
+          - { name: "web-api", path: "Server/VoiceAssistant.Server/"}
+          - { name: "worker-s2t", path: "Server/VoiceAssistant.Server.SpeechToText/"}
   
     steps:
       - name: Checkout code
@@ -31,4 +31,4 @@ jobs:
           context: ${{ matrix.service.path }}
           file: ${{ matrix.service.path }}/Dockerfile
           push: true
-          tags: "ghcr.io/${{ github.repository_owner }}/${{ matrix.service.name }}:latest,ghcr.io/${{ github.repository_owner }}/${{ matrix.service.name }}:sha-${{ github.sha }}"
+          tags: "ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/${{ matrix.service.name }}:latest,ghcr.io/${{ github.repository_owner }}/${{ matrix.service.name }}:sha-${{ github.sha }}"
