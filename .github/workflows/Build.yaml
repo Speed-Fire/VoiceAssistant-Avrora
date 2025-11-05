@@ -31,4 +31,4 @@ jobs:
           context: ${{ matrix.service.path }}
           file: ${{ matrix.service.path }}/Dockerfile
           push: true
-          tags: "ghcr.io/speed-fire/voiceassistant-avrora/${{ matrix.service.name }}:latest,ghcr.io/${{ github.repository_owner }}/${{ matrix.service.name }}:sha-${{ github.sha }}"
+          tags: "ghcr.io/speed-fire/voiceassistant-avrora/${{ matrix.service.name }}:latest,ghcr.io/speed-fire/voiceassistant-avrora/${{ matrix.service.name }}:sha-${{ github.sha }}"
